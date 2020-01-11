@@ -1,0 +1,32 @@
+//summary: Add Position to a list (from latlong). Presumably, the add position fires the redraw
+in the featuregroup and so updates the drawing.
+
+Q: how are coordinates setup in the polygroup?
+(use real area, but no need to convert from mouse position in our case)
+
+
+L.DomEvent.on(this._map, 'click', this._addPosition, this);
+   var position = Position.fromLatLng(this._map, e.latlng, this._map.plane);
+   this._currentDrawable.add(position);
+   this._outputCode();
+
+//does this merely draw the cursor?
+L.DomEvent.on(this._map, 'mousemove', this._drawMouseArea, this);
+  _drawMouseArea: function(e) {
+        if (!this._editing) {
+            return;
+        }
+
+        var mousePos = Position.fromLatLng(this._map, e.latlng, this._map.plane);
+  
+    } else if (this._currentDrawable instanceof PolyArea) {
+                if (this._drawnMouseArea !== undefined) { 
+                    this._map.removeLayer(this._drawnMouseArea);
+                }
+                
+                this._drawnMouseArea = new PolyArea(this._map);
+                this._drawnMouseArea.addAll(this._currentDrawable.positions);
+                this._drawnMouseArea.add(mousePos);
+                this._drawnMouseArea = this._drawnMouseArea.toLeaflet(this._map);
+                this._drawnMouseArea.addTo(this._map, true);
+            }
