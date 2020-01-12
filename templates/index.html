@@ -24,6 +24,9 @@
         socket.on('connect', function() {
             socket.emit('hello', {data: 'I\'m connected!'});
         });
+        socket.on('receive', function(data){
+            console.log('I received:', data)
+        });
 
         var map = L.map('mymap', {
             zoomControl: false,

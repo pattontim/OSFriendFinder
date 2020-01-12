@@ -26,6 +26,8 @@ def handle_players_moved(playerloc, methods=['GET', 'POST']):
 
 @socketio.on('hello')
 def say_hello(data):
+
+    socketio.emit('receive', 'this is string data')
     print(data)
 
 @app.route('/')
@@ -38,5 +40,4 @@ def sessions():
 # @app.route('/')
 
 if __name__ == "__main__":  
-    loop = asyncio.get_event_loop()
     socketio.run(app, debug=True)
