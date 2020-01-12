@@ -15,19 +15,22 @@ def messageReceived():
 # username:name
 # location:(x, y)
 # ie a string as the username and location as a tuple or array of size 2
-@socketio.on('update player')
-def handle_players_moved(playerloc, methods=['GET', 'POST']):
-    print('received my event: ' + str(json))
+@socketio.on('player_update')
+def handle_player_moved(playerloc, methods=['GET', 'POST']):
+    print('We received the data of a single player.' + str(playerloc))
+    # playerloc has the format name:[x,y].
 
-    # update the list of players
-    # you need to update the player
+    # you need to update the global player list, called players
+    # update it with the entry which contains the player for which
+    # the player location change occured (it's in the data stored above)
+    # hint: players is a dictionary type
 
-    socketio.emit('players moved', json, callback=messageReceived)
+    socketio.emit('players_moved', players, callback=messageReceived)
 
-@socketio.on('hello')
-def say_hello(data):
-
-    socketio.emit('receive', 'this is string data')
+@socketio.on('connected')
+def send_positions(data):
+    json = {'tim':[1,2], 'john':[1,2]}
+    socketio.emit('players_moved', json)
     print(data)
 
 @app.route('/')

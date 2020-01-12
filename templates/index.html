@@ -22,9 +22,9 @@
     $(document).ready(function () {
         var socket = io();
         socket.on('connect', function() {
-            socket.emit('hello', {data: 'I\'m connected!'});
+            socket.emit('connected', {data: 'I\'m connected!'});
         });
-        socket.on('receive', function(data){
+        socket.on('players_moved', function(data){
             console.log('I received:', data)
         });
 
