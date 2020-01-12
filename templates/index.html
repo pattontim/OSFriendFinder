@@ -1,0 +1,58 @@
+<html>
+    <head>
+         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin=""/>
+         <!-- Make sure you put this AFTER Leaflet's CSS -->
+        <!-- <script src="static/js/controls/coordinates_control.js"></script> -->
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        window.jQuery || document.write('<script type="text/javascript" src="js/external/jquery-3.2.1.min.js\"><\/script>');
+    </script>
+        <style>
+        #mymap { height: 600px; }
+        </style>
+            <!-- Try to load main JS module -->
+    <script type="module">
+
+    $(document).ready(function () {
+        var socket = io();
+        socket.on('connect', function() {
+            socket.emit('hello', {data: 'I\'m connected!'});
+        });
+
+        var map = L.map('mymap', {
+            zoomControl: false,
+            renderer: L.canvas()
+        }).setView([-79, -137], 7);
+
+        map.plane = 0;
+
+        map.updateMapPath = function() {
+            if (map.tile_layer !== undefined) {
+                map.removeLayer(map.tile_layer);
+            }
+            map.tile_layer = L.tileLayer('https://raw.githubusercontent.com/Explv/osrs_map_full_2019_09_13/master/' + map.plane + '/{z}/{x}/{y}.png', {
+                minZoom: 4,
+                maxZoom: 11,
+                attribution: 'Map data',
+                noWrap: true,
+                tms: true
+            });
+            map.tile_layer.addTo(map);
+            map.invalidateSize();
+        }
+
+        map.updateMapPath();
+        map.getContainer().focus();
+    }); 
+    </script>
+    </head>
+    <body>
+        <div id="mymap"></div>
+    </body>
+</html>
